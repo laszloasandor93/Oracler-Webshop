@@ -18,6 +18,7 @@ export async function POST(request) {
     const height = formData.get('height')
     const diameter = formData.get('diameter')
     const customerName = formData.get('customerName')
+    const customerEmail = formData.get('customerEmail')
     const customerPhone = formData.get('customerPhone')
     const country = formData.get('country')
     const region = formData.get('region')
@@ -34,9 +35,18 @@ export async function POST(request) {
     }
 
     // Validate customer information
-    if (!customerName || !customerPhone || !country || !region || !street || !number || !postalCode) {
+    if (!customerName || !customerEmail || !customerPhone || !country || !region || !street || !number || !postalCode) {
       return NextResponse.json(
         { error: 'Missing customer information. Please fill in all required fields.' },
+        { status: 400 }
+      )
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(customerEmail)) {
+      return NextResponse.json(
+        { error: 'Invalid email address format.' },
         { status: 400 }
       )
     }
@@ -117,6 +127,7 @@ export async function POST(request) {
       savedFilePath: filePath,
       customer: {
         name: customerName,
+        email: customerEmail,
         phone: customerPhone,
         address: {
           country,

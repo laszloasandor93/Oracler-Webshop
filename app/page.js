@@ -16,6 +16,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [customerName, setCustomerName] = useState('')
+  const [customerEmail, setCustomerEmail] = useState('')
   const [customerPhone, setCustomerPhone] = useState('')
   const [country, setCountry] = useState('')
   const [region, setRegion] = useState('')
@@ -108,6 +109,18 @@ export default function Home() {
       return
     }
 
+    if (!customerEmail.trim()) {
+      alert('Please enter your email address')
+      return
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(customerEmail.trim())) {
+      alert('Please enter a valid email address')
+      return
+    }
+
     if (!customerPhone.trim()) {
       alert('Please enter your phone number')
       return
@@ -132,6 +145,7 @@ export default function Home() {
       formData.append('quantity', quantity)
       formData.append('file', file)
       formData.append('customerName', customerName)
+      formData.append('customerEmail', customerEmail)
       formData.append('customerPhone', customerPhone)
       formData.append('country', country)
       formData.append('region', region)
@@ -167,6 +181,7 @@ export default function Home() {
         setFile(null)
         setFileName('')
         setCustomerName('')
+        setCustomerEmail('')
         setCustomerPhone('')
         setCountry('')
         setRegion('')
@@ -447,6 +462,19 @@ export default function Home() {
                   required
                   disabled={isSubmitting}
                   placeholder="Enter your full name"
+                />
+              </div>
+
+              <div className={styles.modalFormGroup}>
+                <label htmlFor="customerEmail">Email Address *</label>
+                <input
+                  type="email"
+                  id="customerEmail"
+                  value={customerEmail}
+                  onChange={(e) => setCustomerEmail(e.target.value)}
+                  required
+                  disabled={isSubmitting}
+                  placeholder="Enter your email address"
                 />
               </div>
 
