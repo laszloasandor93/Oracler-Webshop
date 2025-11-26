@@ -1,0 +1,549 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 0 24px 32px 24px;
+    text-align: center;
+}
+
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.logo {
+    object-fit: contain;
+    max-width: 480px;
+    max-height: 480px;
+    width: auto;
+    height: auto;
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #000000;
+}
+
+.subtitle {
+    font-size: 16px;
+    opacity: 0.9;
+    font-weight: 400;
+}
+
+.orderForm {
+    padding: 32px 24px;
+}
+
+.formSection {
+    margin-bottom: 32px;
+    animation: fadeIn 0.3s ease;
+}
+
+.sectionLabel {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+}
+
+/* Radio Options */
+.shapeOptions,
+.laminationOptions,
+.laminationTypeOptions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.radioOption {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 140px;
+    position: relative;
+}
+
+.radioOption:hover {
+    border-color: var(--primary-color);
+    background: #f3f4f6;
+}
+
+.radioOption input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radioCustom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    margin-right: 12px;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.radioOption input[type="radio"]:checked ~ .radioCustom {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+}
+
+.radioOption input[type="radio"]:checked ~ .radioCustom::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
+
+.radioOption input[type="radio"]:checked ~ .radioLabel {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.radioOption input[type="radio"]:checked {
+    border-color: var(--primary-color);
+    background: #eef2ff;
+}
+
+.radioLabel {
+    font-size: 15px;
+    color: var(--text-primary);
+    transition: color 0.2s ease;
+}
+
+/* Input Groups */
+.sizeInputs {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.inputGroup {
+    flex: 1;
+    min-width: 140px;
+    position: relative;
+}
+
+.inputGroup label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.inputGroup input[type="number"] {
+    width: 100%;
+    padding: 12px 16px;
+    padding-right: 50px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.inputGroup input[type="number"]:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.unit {
+    position: absolute;
+    right: 16px;
+    top: 42px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+/* File Upload */
+.fileUploadWrapper {
+    position: relative;
+}
+
+.fileUploadWrapper input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.fileUploadLabel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.fileUploadLabel:hover {
+    border-color: var(--primary-color);
+    background: #f3f4f6;
+    color: var(--primary-color);
+}
+
+.fileUploadLabel svg {
+    flex-shrink: 0;
+}
+
+.fileName {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: #eef2ff;
+    border-radius: var(--radius-sm);
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 500;
+    display: none;
+}
+
+.fileName.show {
+    display: block;
+}
+
+/* Order Button */
+.orderButton {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-md);
+    margin-top: 8px;
+}
+
+.orderButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.orderButton:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.orderButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.orderButton svg {
+    transition: transform 0.2s ease;
+}
+
+.orderButton:hover:not(:disabled) svg {
+    transform: translateX(4px);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .header {
+        padding: 24px 20px;
+    }
+
+    .logo {
+        max-width: 320px;
+        max-height: 320px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+    }
+
+    .orderForm {
+        padding: 24px 20px;
+    }
+
+    .formSection {
+        margin-bottom: 24px;
+    }
+
+    .shapeOptions,
+    .laminationOptions,
+    .laminationTypeOptions {
+        flex-direction: column;
+    }
+
+    .radioOption {
+        min-width: 100%;
+    }
+
+    .sizeInputs {
+        flex-direction: column;
+    }
+
+    .inputGroup {
+        min-width: 100%;
+    }
+
+    .orderButton {
+        font-size: 16px;
+        padding: 14px 20px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Modal Styles */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+    background: var(--bg-primary);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.modalHeader h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.modalClose {
+    background: none;
+    border: none;
+    font-size: 32px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.modalClose:hover:not(:disabled) {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.modalClose:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.modalForm {
+    padding: 24px;
+}
+
+.modalFormGroup {
+    margin-bottom: 20px;
+}
+
+.modalFormGroup label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.modalFormGroup input,
+.modalFormGroup textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+.modalFormGroup input:focus,
+.modalFormGroup textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.modalFormGroup input:disabled,
+.modalFormGroup textarea:disabled {
+    background: var(--bg-secondary);
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.modalFormGroup textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.modalActions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.modalCancel,
+.modalSubmit {
+    padding: 12px 24px;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.modalCancel {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.modalCancel:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+
+.modalSubmit {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.modalSubmit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.modalCancel:disabled,
+.modalSubmit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .modalContent {
+        max-width: 100%;
+        margin: 0;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .modalHeader {
+        padding: 20px;
+    }
+
+    .modalHeader h2 {
+        font-size: 20px;
+    }
+
+    .modalForm {
+        padding: 20px;
+    }
+
+    .modalActions {
+        flex-direction: column-reverse;
+    }
+
+    .modalCancel,
+    .modalSubmit {
+        width: 100%;
+    }
+
+    .modalFormGroup div[style*="display: flex"] {
+        flex-direction: column !important;
+    }
+}
+
