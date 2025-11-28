@@ -3,6 +3,7 @@ import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
 import { sendOrderEmail } from '../../../lib/email.js'
+import { supabaseServer } from '../../../lib/supabase-server.js'
 
 export async function POST(request) {
   try {
@@ -140,10 +141,47 @@ export async function POST(request) {
       createdAt: new Date().toISOString(),
     }
 
-    // Here you would typically:
-    // 1. Save order to database
-    // 2. Process payment (if applicable)
-    // 3. Queue for production
+    // Save order to Supabase database
+    let dbOrderId = null
+    if (supabaseServer) {
+      try {
+        const { data: dbOrder, error: dbError } = await supabaseServer
+          .from('orders')
+          .insert([
+            {
+              order_id: orderData.orderId,
+              shape: orderData.shape,
+              size: orderData.size,
+              lamination: orderData.lamination,
+              lamination_type: orderData.laminationType,
+              quantity: orderData.quantity,
+              file_name: orderData.fileName,
+              file_size: orderData.fileSize,
+              file_path: orderData.savedFilePath,
+              customer_name: orderData.customer.name,
+              customer_email: orderData.customer.email,
+              customer_phone: orderData.customer.phone,
+              customer_address: orderData.customer.address,
+              created_at: orderData.createdAt,
+            },
+          ])
+          .select()
+          .single()
+
+        if (dbError) {
+          console.error('Error saving order to database:', dbError)
+          // Continue even if database save fails
+        } else {
+          dbOrderId = dbOrder?.id
+          console.log('Order saved to database with ID:', dbOrderId)
+        }
+      } catch (dbError) {
+        console.error('Error connecting to database:', dbError)
+        // Continue even if database connection fails
+      }
+    } else {
+      console.warn('Supabase not configured. Order not saved to database.')
+    }
 
     // Log order
     console.log('Order received:', orderData)
@@ -166,6 +204,7 @@ export async function POST(request) {
       {
         success: true,
         orderId: orderData.orderId,
+        dbOrderId: dbOrderId,
         message: 'Order received successfully',
         emailSent,
         emailError: emailError || null,

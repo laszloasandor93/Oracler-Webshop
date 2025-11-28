@@ -1,6 +1,6 @@
 # Custom Sticker Shop - Next.js Web Application
 
-A modern, mobile-first web shop for ordering custom stickers built with Next.js.
+A modern, mobile-first web shop for ordering custom stickers built with Next.js and Supabase.
 
 ## Features
 
@@ -14,6 +14,8 @@ A modern, mobile-first web shop for ordering custom stickers built with Next.js.
 - **Quantity Input**: Specify the number of stickers needed
 - **File Upload**: Upload design files (.png, .jpg, .tiff)
 - **Backend API**: Next.js API route for processing orders
+- **Database Integration**: Orders saved to Supabase PostgreSQL database
+- **Email Notifications**: Automatic email with order details
 
 ## Getting Started
 
@@ -21,6 +23,7 @@ A modern, mobile-first web shop for ordering custom stickers built with Next.js.
 
 - Node.js 18+ installed
 - npm or yarn package manager
+- Supabase account (for database)
 - Email account for sending order notifications (Gmail, Outlook, etc.)
 
 ### Installation
@@ -30,28 +33,37 @@ A modern, mobile-first web shop for ordering custom stickers built with Next.js.
 npm install
 ```
 
-2. Configure email settings:
-   - Copy `.env.example` to `.env.local`
+2. Set up Supabase:
+   - Create a Supabase project at [https://supabase.com](https://supabase.com)
+   - Go to your project settings and get your Project URL and anon/public key
+   - Run the SQL script in `supabase-schema.sql` in your Supabase SQL Editor to create the orders table
+   - Add Supabase credentials to `.env.local`:
+     ```
+     NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+     NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+     ```
+
+3. Configure email settings:
    - Update `config/email.js` with your recipient email address
    - Fill in SMTP credentials in `.env.local`:
      ```
-     SMTP_HOST=smtp.gmail.com
+     SMTP_HOST=smtp.mail.yahoo.com
      SMTP_PORT=587
-     SMTP_USER=your-email@gmail.com
+     SMTP_USER=your-email@yahoo.com
      SMTP_PASSWORD=your-app-password
      ```
    
-   **For Gmail:**
+   **For Yahoo Mail:**
    - Enable 2-factor authentication
    - Generate an App Password (not your regular password)
    - Use the App Password in `SMTP_PASSWORD`
 
-3. Run the development server:
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Building for Production
 
@@ -67,21 +79,39 @@ npm start
 │   ├── api/
 │   │   └── order/
 │   │       └── route.js      # API endpoint for order submission
+│   ├── sticker-shop/
+│   │   ├── page.js           # Sticker shop order form
+│   │   └── page.module.css   # Sticker shop styles
 │   ├── globals.css           # Global styles
 │   ├── layout.js             # Root layout component
-│   ├── page.js               # Main page component (client-side)
-│   └── page.module.css       # Component-specific styles
+│   └── page.js               # Home page
+├── components/
+│   ├── Navigation.js         # Navigation bar component
+│   └── Navigation.module.css # Navigation styles
+├── lib/
+│   ├── email.js              # Email sending utility
+│   └── supabase-server.js    # Supabase client configuration
+├── config/
+│   └── email.js              # Email configuration
 ├── uploads/                  # Uploaded files directory (created automatically)
+├── supabase-schema.sql       # Database schema SQL
 ├── next.config.js            # Next.js configuration
 ├── package.json              # Dependencies and scripts
 └── README.md                 # This file
 ```
 
+## Database Setup
+
+1. Create a Supabase project
+2. Go to SQL Editor in your Supabase dashboard
+3. Copy and run the SQL from `supabase-schema.sql`
+4. This will create the `orders` table with all necessary fields
+
 ## API Endpoint
 
 ### POST `/api/order`
 
-Handles sticker order submissions.
+Handles sticker order submissions and saves to Supabase database.
 
 **Request Body (FormData):**
 - `shape`: "rectangle" | "circle"
@@ -92,13 +122,23 @@ Handles sticker order submissions.
 - `laminationType`: "gloss" | "matt" (required if lamination is "yes")
 - `quantity`: number
 - `file`: File object (.png, .jpg, .tiff)
+- `customerName`: string
+- `customerEmail`: string
+- `customerPhone`: string
+- `country`: string
+- `region`: string
+- `street`: string
+- `number`: string
+- `postalCode`: string
 
 **Response:**
 ```json
 {
   "success": true,
   "orderId": "ORD-1234567890",
+  "dbOrderId": 123,
   "message": "Order received successfully",
+  "emailSent": true,
   "order": { ... }
 }
 ```
@@ -109,34 +149,19 @@ Uploaded files are saved to the `uploads/` directory with a timestamp prefix to 
 
 ## Email Configuration
 
-When an order is submitted, an email is automatically sent to the recipient address configured in `config/email.js`.
-
-**To configure email:**
-1. Edit `config/email.js` and set `recipientEmail` to your desired email address
-2. Set up SMTP credentials in `.env.local` (see `.env.example` for template)
-3. For Gmail, use an App Password (not your regular password)
-
-The email includes:
-- Order ID
-- Order date and time
-- Shape, size, lamination details
-- Quantity
-- File information
-- File location on server
+When an order is submitted, an email is automatically sent to the recipient address configured in `config/email.js`. The customer is CC'd on the email.
 
 ## Next Steps
 
 To make this production-ready, consider:
 
-1. **Database Integration**: Store orders in a database (PostgreSQL, MongoDB, etc.)
-2. **File Storage**: Use cloud storage (AWS S3, Cloudinary, etc.) instead of local filesystem
-3. **Authentication**: Add user authentication and order history
-4. **Payment Processing**: Integrate payment gateway (Stripe, PayPal, etc.)
-5. **Admin Dashboard**: Create admin panel for managing orders
-6. **Image Processing**: Add image validation and optimization
-7. **Email Templates**: Customize email templates for different order types
+1. **File Storage**: Use Supabase Storage or cloud storage (AWS S3, Cloudinary, etc.) instead of local filesystem
+2. **Authentication**: Add user authentication with Supabase Auth
+3. **Payment Processing**: Integrate payment gateway (Stripe, PayPal, etc.)
+4. **Admin Dashboard**: Create admin panel for managing orders
+5. **Image Processing**: Add image validation and optimization
+6. **Order Status Tracking**: Add order status updates
 
 ## License
 
 MIT
-
